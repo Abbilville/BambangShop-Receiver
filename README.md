@@ -68,16 +68,16 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [x] Commit: `Implement list_all_as_string function in Notification repository.`
     -   [x] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
 -   **STAGE 3: Implement services and controllers**
-    -   [ ] Commit: `Create Notification service struct skeleton.`
-    -   [ ] Commit: `Implement subscribe function in Notification service.`
-    -   [ ] Commit: `Implement subscribe function in Notification controller.`
-    -   [ ] Commit: `Implement unsubscribe function in Notification service.`
-    -   [ ] Commit: `Implement unsubscribe function in Notification controller.`
-    -   [ ] Commit: `Implement receive_notification function in Notification service.`
-    -   [ ] Commit: `Implement receive function in Notification controller.`
-    -   [ ] Commit: `Implement list_messages function in Notification service.`
-    -   [ ] Commit: `Implement list function in Notification controller.`
-    -   [ ] Write answers of your learning module's "Reflection Subscriber-2" questions in this README.
+    -   [x] Commit: `Create Notification service struct skeleton.`
+    -   [x] Commit: `Implement subscribe function in Notification service.`
+    -   [x] Commit: `Implement subscribe function in Notification controller.`
+    -   [x] Commit: `Implement unsubscribe function in Notification service.`
+    -   [x] Commit: `Implement unsubscribe function in Notification controller.`
+    -   [x] Commit: `Implement receive_notification function in Notification service.`
+    -   [x] Commit: `Implement receive function in Notification controller.`
+    -   [x] Commit: `Implement list_messages function in Notification service.`
+    -   [x] Commit: `Implement list function in Notification controller.`
+    -   [x] Write answers of your learning module's "Reflection Subscriber-2" questions in this README.
 
 ## Your Reflections
 This is the place for you to write reflections:
@@ -85,11 +85,19 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
-**1. In this tutorial, we used RwLock<> to synchronise the use of Vec of Notifications. Explain why it is necessary for this case, and explain why we do not use Mutex<> instead?** <br>
+1. **In this tutorial, we used RwLock<> to synchronise the use of Vec of Notifications. Explain why it is necessary for this case, and explain why we do not use Mutex<> instead?** <br>
 Penggunaan <code>RwLock<Vec<Notification>></code> dalam kasus ini diperlukan untuk mensinkronkan penggunaan struktur data bersama, Vec dari Notification, di seluruh thread. RwLock memungkinkan beberapa reader untuk mengakses data secara bersamaan sementara memastikan akses eksklusif untuk penulisan. Ini sangat penting dalam lingkungan multi-thread untuk mencegah balapan data dan memastikan konsistensi data.<br>
 Alasan pemilihan RwLock dibandingkan dengan Mutex terletak pada locking strategies-nya. RwLock memungkinkan beberapa reader untuk me-read lock secara bersamaan, yang cocok untuk skenario dimana operasi read lebih sering terjadi daripada operasi tulis. Di sisi lain, Mutex memberikan akses eksklusif, hanya memungkinkan satu thread untuk mendapatkan lock pada satu waktu, yang dapat menyebabkan kontensi dan pengurangan concurrency jika ada banyak operasi read.<br>
-**2. In this tutorial, we used lazy_static external library to define Vec and DashMap as a “static” variable. Compared to Java where we can mutate the content of a static variable via a static function, why did not Rust allow us to do so?** <br>
+2. **In this tutorial, we used lazy_static external library to define Vec and DashMap as a “static” variable. Compared to Java where we can mutate the content of a static variable via a static function, why did not Rust allow us to do so?** <br>
 Dalam Rust, merubah value variabel static melalui fungsi statis tidak diizinkan karena melanggar aturan ownership dan borrowing pada Rust, khususnya konsep mutable aliasing. Design Rust memastikan memory safety dan mencegah data teroverwrite satu sama lain dengan memberlakukan aturan yang ketat seputar referensi mutable dan status bersama yang dapat dimutasi. <br>
 Dalam Java, merubah value variabel static melalui fungsi statis diizinkan karena Java tidak memiliki tingkat ketat dan safety guaranteed seperti Rust. Model memori dan concurrency primitive Java berbeda, dan Java lebih mengandalkan mekanisme explicit synchronization seperti blok synchronized atau variabel volatile untuk memastikan keamanan thread. Rust, di sisi lain, memanfaatkan sistem borrowing dan concurrency primitive-nya seperti Mutex dan RwLock untuk menyediakan concurrency yang aman dan efisien tanpa mengorbankan memory safety.
 
 #### Reflection Subscriber-2
+1. **Have you explored things outside of the steps in the tutorial, for example: src/lib.rs? If not, explain why you did not do so. If yes, explain things that you have learned from those other parts of code.** <br>
+Saya belajar tentang penggunaan lazy_static untuk inisialisasi variabel global secara lazy, implementasi konfigurasi aplikasi dengan bantuan .env file, dan pola umum dalam penanganan error menggunakan tipe Result<T, E> dan Custom<Json<ErrorResponse>>. <br>
+
+2. **Since you have completed the tutorial by now and have tried to test your notification system by spawning multiple instances of Receiver, explain how Observer pattern eases you to plug in more subscribers. How about spawning more than one instance of Main app, will it still be easy enough to add to the system?** <br>
+Observer pattern untuk sistem notifikasi dapat mempermudah penambahan subscriber baru. Dengan menyimpan list dari observer, dapat dengan mudah menambahkan subscriber baru tanpa perlu mengubah struktur utama aplikasi. Namun, saat mencoba membuat lebih dari satu instance dari aplikasi utama,  setiap instance memiliki pola Observer sendiri. Ini berarti jika kita ingin berbagi notifikasi antar instance, kita perlu menyediakan mekanisme penyimpanan data bersama yang dapat diakses oleh semua instance. <br>
+
+3. **Have you tried to make your own Tests, or enhance documentation on your Postman collection? If you have tried those features, tell us whether it is useful for your work (it can be your tutorial work or your Group Project).**
+Saya belum mencoba membuat tes sendiri atau meningkatkan dokumentasi pada koleksi Postman saya. Namun, saya percaya bahwa fitur-fitur tersebut sangat berguna untuk tugas kelompok saya nanti.
